@@ -87,6 +87,7 @@ public class UserFile {
 
             System.out.println(fixToRead(0));
             System.out.println(fixToRead(i+50));
+            user.seek(i+100);
             System.out.println(user.readInt());
 
         }
