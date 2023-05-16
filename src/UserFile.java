@@ -4,26 +4,30 @@ import java.io.RandomAccessFile;
 
 public class UserFile {
 
-    protected RandomAccessFile fileUser;
+    RandomAccessFile user;
 
-    private int SIZEu = 20;
+    static int SIZEu = 25;
 
     public UserFile() throws FileNotFoundException {
 
-        this.fileUser = new  RandomAccessFile("User" , "rw");
+        this.user = new RandomAccessFile("User.dat", "rw");
 
     }
 //    =================================================================================================================>
 
-//     [ WRITE FILE OF USER ]
+//     [ WRITE FILE : USER ]
 
-    public void writeUser(String name , String password) throws IOException {
+    public void writeUser(String info) throws IOException {
 
-        fixUserInfoToWrite(name);
-        fixUserInfoToWrite(password);
+        info = fixToWrite(info);
 
-        fileUser.writeChars(name);
-        fileUser.writeChars(password);
+        this.user = new RandomAccessFile("User.dat", "rw");
+
+        user.seek(user.length());
+
+        user.writeChars(info);
+
+        user.close();
 
     }
 
@@ -31,57 +35,64 @@ public class UserFile {
 
 //     [ FIX NAME AND PASSWORD FOR WRITE ]
 
-    public String fixUserInfoToWrite(String info ){
+    public String fixToWrite(String info) throws IOException {
 
+        for (int i = info.length(); i < SIZEu; i++) {
 
-        for (int i = 0; i < 20; i++) {
-
-            if (info.length() < SIZEu){
-
-                info += " ";
-
-
-
-            }
+            info += " ";
 
         }
 
-        return info.substring(0 , SIZEu) ;
-
-
+        return info;
     }
 
 //    =================================================================================================================>
 
-//     [ READ NAME AND PASSWORD ]
+//    [ Fix NAME AND PASSWORD FOR READ]
 
-    public  void readFileUser() throws IOException {
+    public String fixToRead(long pointer) throws IOException {
 
-        String name , pass;
+        String info = "";
 
-        name = fixUserInfoToRead();
-        pass = fixUserInfoToRead();
+        this.user = new RandomAccessFile("User.dat", "rw");
 
-    }
-
-//    =================================================================================================================>
-
-//     [ Fix NAME AND PASSWORD FOR READ ]
-
-    public  String fixUserInfoToRead() throws IOException {
-
-        String info;
-
-        info = "";
+        user.seek(pointer);
 
         for (int i = 0; i < SIZEu; i++) {
 
-            info += fileUser.readChar();
+            info += user.readChar();
 
         }
+
+        user.close();
 
         return info.trim();
 
     }
 
+
+//    =================================================================================================================>
+
+
+
+//  ==============================
+
+
+    public void print() throws IOException {
+
+
+        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
+
+        for (int i = 0; i <user.length() ; i= i + 104) {
+
+            System.out.println(fixToRead(0));
+            System.out.println(fixToRead(i+50));
+            System.out.println(user.readInt());
+
+        }
+
+        user.close();
+
+
+    }
 }
