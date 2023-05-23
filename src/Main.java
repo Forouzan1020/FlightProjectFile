@@ -8,13 +8,19 @@ public class Main {
 
         Login login = new Login();
         UserFile userFile = new UserFile();
+        FlightFile flightFile = new FlightFile();
+        TicketFile ticketFile = new TicketFile();
+        AdminAction adminAction = new AdminAction();
+//        flightFile.flightDefault();
 //        userFile.writeUser("name");
 //        userFile.writeUser("pass");
 //        user.seek(user.length());
 //        user.writeInt(0);
-        userFile.print();
+//        adminAction.printSchedules(flightFile);
 //        user.close();
-//        login.start();
+//        ticketFile.print();
+
+        login.start();
 
 
     }

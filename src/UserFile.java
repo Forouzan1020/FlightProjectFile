@@ -8,9 +8,10 @@ public class UserFile {
 
     static int SIZEu = 25;
 
-    public UserFile() throws FileNotFoundException {
+    public UserFile() throws IOException {
 
         this.user = new RandomAccessFile("User.dat", "rw");
+        user.close();
 
     }
 //    =================================================================================================================>
@@ -71,29 +72,6 @@ public class UserFile {
     }
 
 
-//    =================================================================================================================>
 
 
-
-//  ==============================
-
-
-    public void print() throws IOException {
-
-
-        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
-
-        for (int i = 0; i <user.length() ; i= i + 104) {
-
-            System.out.println(fixToRead(0));
-            System.out.println(fixToRead(i+50));
-            user.seek(i+100);
-            System.out.println(user.readInt());
-
-        }
-
-        user.close();
-
-
-    }
 }
