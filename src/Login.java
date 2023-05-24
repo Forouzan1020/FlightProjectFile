@@ -188,7 +188,7 @@ public class Login {
         if (pass.equals("X")) {
 
             welcome(ticketFile, userFile, user, adminAction, flightFile);
-        } else if (findUserName(userFile, name, user) == -2) {
+        } else if (findUserName(userFile, name, user) == -2 && !name.equals("Admin")) {
 
             userFile.writeUser(name);
             userFile.writeUser(pass);

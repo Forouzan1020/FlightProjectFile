@@ -43,13 +43,12 @@ public class UserAction {
             }
 
             case 4: {
-//                ticketCancellation(ticketFile,userFile, user, adminAction, flightFile);
-//                break;
+                ticketCancellation(ticketFile,adminAction,flightFile,userFile);
+                break;
             }
 
             case 5: {
 
-//                System.out.println(this.posUInT);
                 bookedTicket(ticketFile,flightFile,adminAction,userFile);
                 break;
             }
@@ -295,9 +294,7 @@ public class UserAction {
 //     [ PRINT AFTER SORT ]
     public void printSort(TicketFile ticketFile,FlightFile flightFile ,int count , long[] reWrite , AdminAction adminAction  , UserFile userFile ,RandomAccessFile user) throws IOException {
 
-        long i;
-
-        i = reWrite[0];
+        long j;
 
         RandomAccessFile flight = new RandomAccessFile("Flight.dat", "rw");
 
@@ -306,13 +303,11 @@ public class UserAction {
         System.out.println("|FlightId       |Origin         |Destination    |Date           |Time           |Price          |Seats          \n");
 
         for (int k = 0; k < count ; k++) {
-
-            for (long j = reWrite[k]; j < i + 150; j = j + 30) {
-                System.out.printf("|%-15s", flightFile.fixToRead(j));
-            }
-            flight.seek(i + 150);
+            j = reWrite[k];
+            System.out.printf("|%-15s|%-15s|%-15s|%-15s|%-15s", flightFile.fixToRead(j),flightFile.fixToRead(j+30),flightFile.fixToRead(j+60),flightFile.fixToRead(j+90),flightFile.fixToRead(j+120));
+            flight.seek(j + 150);
             System.out.printf("|%-15d", flight.readInt());
-            flight.seek(i + 154);
+            flight.seek(j + 154);
             System.out.printf("|%-15d\n", flight.readInt());
         }
         flight.close();
@@ -496,12 +491,10 @@ public class UserAction {
         RandomAccessFile flight = new RandomAccessFile("Flight.dat", "rw");
 
         flight.seek(0);
-        long length;
-        length = flight.length();
         System.out.println("[ Enter the min price ]");
         priceMin = cin.nextInt();
 
-        for (long i = 150; i < length; i = i+158 ) {
+        for (long i = 150; i < flight.length(); i = i+158 ) {
 
             flight.seek(i);
             price = flight.readInt();
@@ -538,7 +531,7 @@ public class UserAction {
     public void printSeatsS(TicketFile ticketFile,AdminAction adminAction , FlightFile flightFile , UserFile userFile ,RandomAccessFile user) throws IOException {
 
         adminAction.printSchedules(flightFile);
-        System.out.println("[ Enter the seat ]\n[ Enter 0 if you want back ]");
+        System.out.println("[ Enter the max seat ]\n[ Enter 0 if you want back ]");
         int seatMax ,seatMin;
         int count = 0  , seat;
         long[] reWrite = new long[30];
@@ -553,12 +546,11 @@ public class UserAction {
         RandomAccessFile flight = new RandomAccessFile("Flight.dat", "rw");
 
         flight.seek(0);
-        long length;
-        length = flight.length()-1;
+
         System.out.println("[ Enter the min seat ]");
         seatMin = cin.nextInt();
 
-        for (long i = 154; i < length; i = i+158 ) {
+        for (long i = 154; i < flight.length(); i = i+158 ) {
 
 
                 flight.seek(i);
@@ -580,7 +572,7 @@ public class UserAction {
             } catch (InterruptedException e) {
             }
             ;
-            printOriginS(ticketFile,adminAction, flightFile, userFile, user);
+            printSeatsS(ticketFile,adminAction, flightFile, userFile, user);
 
         }
 
@@ -651,7 +643,7 @@ public class UserAction {
             }else {
 
                 userPos = Login.pointer;
-                writePos = ticketFile.posForBuy(userPos);
+                writePos = ticketFile.posForBuy(ticketFile.findUserT());
 
                 if (userPos >= 0 && writePos >= 0) {
 
@@ -784,10 +776,6 @@ public class UserAction {
 
         long  j;
 
-
-
-
-
         RandomAccessFile flight = new RandomAccessFile("Flight.dat", "rw");
         RandomAccessFile ticket = new RandomAccessFile("ticket.dat" , "rw");
 
@@ -817,5 +805,61 @@ public class UserAction {
             passengerMenu(ticketFile, userFile, user, adminAction, flightFile);
         }
     }
+//    =================================================================================================================>
 
+//     [ TICKETS CANCELLATION ]
+
+    public void ticketCancellation(TicketFile ticketFile,AdminAction adminAction , FlightFile flightFile , UserFile userFile ) throws IOException {
+
+        System.out.println("[ Enter the ID of the ticket you want to cancel ]\n[ Enter 0 if you want back ]");
+
+        long pos;
+        int ticketId , ticketId1;
+        String flightId;
+        ticketId = cin.nextInt();
+
+        RandomAccessFile flight = new RandomAccessFile("Flight.dat", "rw");
+        RandomAccessFile ticket = new RandomAccessFile("ticket.dat" , "rw");
+        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
+
+        if (ticketId == 0){
+
+            passengerMenu(ticketFile, userFile, user, adminAction, flightFile);
+        }
+
+
+        flight.seek(0);
+        ticket.seek(0);
+
+        for (long i = posUInT+30; i < posUInT+196; i=i+34) {
+
+            ticket.seek(i+30);
+            ticketId1 = ticket.readInt();
+            if (ticketId1 == ticketId){
+
+                flightId = ticketFile.fixToRead(i);
+                pos = flightFile.findFlight(flightId);
+                flight.seek(pos+154);
+                flight.writeInt(flight.readInt()+1);
+                user.seek(Login.pointer+100);
+                flight.seek(pos+150);
+                user.writeInt(user.readInt()+flight.readInt());
+                ticketFile.writeTicket("null" ,i);
+
+                Login.don();
+                try{Thread.sleep(500);}catch(InterruptedException e) {};
+                passengerMenu(ticketFile, userFile, user, adminAction, flightFile);
+
+            }
+
+        }
+
+            System.out.println("[ Tis ticketId not exist ]");
+            try{Thread.sleep(500);}catch(InterruptedException e) {};
+            ticketCancellation(ticketFile,adminAction,flightFile,userFile);
+
+
+
+
+    }
 }
