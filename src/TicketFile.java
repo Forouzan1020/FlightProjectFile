@@ -95,7 +95,7 @@ public class TicketFile {
 
         ticket.seek(0);
 
-        for (long i = posUser + 30; i < ticket.length(); i=i+34) {
+        for (long i = posUser + 30; i < UserAction.posUInT + 170; i=i+34) {
 
             if (fixToRead(i).equals("null")){
                 ticket.close();

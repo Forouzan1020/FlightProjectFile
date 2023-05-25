@@ -3,15 +3,18 @@ import java.io.RandomAccessFile;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//
-//        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
+
 
         Login login = new Login();
-        UserFile userFile = new UserFile();
         FlightFile flightFile = new FlightFile();
-        TicketFile ticketFile = new TicketFile();
-        AdminAction adminAction = new AdminAction();
-//        flightFile.flightDefault();
+
+        login.start();
+        flightFile.flightDefault();
+
+//        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
+//        UserFile userFile = new UserFile();
+//        TicketFile ticketFile = new TicketFile();
+//        AdminAction adminAction = new AdminAction();
 //        userFile.writeUser("name");
 //        userFile.writeUser("pass");
 //        user.seek(user.length());
@@ -19,9 +22,7 @@ public class Main {
 //        adminAction.printSchedules(flightFile);
 //        user.close();
 //        ticketFile.print();
-
-        login.start();
-
+//        System.out.println(user.length());
 
     }
 }
