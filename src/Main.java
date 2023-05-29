@@ -9,7 +9,7 @@ public class Main {
         FlightFile flightFile = new FlightFile();
 
         login.start();
-        flightFile.flightDefault();
+//        flightFile.flightDefault();
 
 //        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
 //        UserFile userFile = new UserFile();

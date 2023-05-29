@@ -81,8 +81,9 @@ public class Login {
 
         name = cin.next();
 
-        if (findUserName(userFile, name, user) != -2) {
-            pointer = findUserName(userFile, name, user);
+        pointer = findUserName(userFile, name, user);
+        if (pointer != -2) {
+
 
             System.out.println("[ Enter your pass ] ");
 
@@ -135,10 +136,11 @@ public class Login {
                 user.close();
                 return i;
 
-            } else if (info.equals("Admin")) {
-
-                return -1;
             }
+        }
+        if (info.equals("Admin")) {
+
+            return -1;
         }
 
         return -2;
@@ -149,16 +151,16 @@ public class Login {
 
     public long findUserPass(UserFile userFile, String pass) throws IOException {
 
+        if (pass.equals("Admin")) {
 
+            return 1;
+
+        }
         if (userFile.fixToRead(pointer + 50).equals(pass)) {
 
             return 0;
 
-        } else if (pass.equals("Admin")) {
-
-            return 1;
-
-        } else {
+        }else {
 
             return -1;
 
