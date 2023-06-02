@@ -8,8 +8,9 @@ public class Main {
         Login login = new Login();
         FlightFile flightFile = new FlightFile();
 
+
+        flightFile.flightDefault();
         login.start();
-//        flightFile.flightDefault();
 
 //        RandomAccessFile user = new RandomAccessFile("User.dat", "rw");
 //        UserFile userFile = new UserFile();
